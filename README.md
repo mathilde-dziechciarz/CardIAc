@@ -20,4 +20,4 @@ Pour lancer ce projet :
 ## 4. Architecture
 - **Langage :** Python
 - **IA :** OpenAI GPT-4o (via API)
-- **Sécurité :** Gestion des clés via variables d'environnement.# CardIAc
+- **Sécurité :** Gestion des clés via variables d'environnement.
