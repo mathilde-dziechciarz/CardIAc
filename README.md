@@ -1,4 +1,1 @@
 # CardIAc
-
-
-Here’s your OpenAI secret key: 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
