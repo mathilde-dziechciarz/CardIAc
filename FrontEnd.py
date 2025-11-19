@@ -97,7 +97,7 @@ st.set_page_config(page_title="CardIAc — Analyse d'ECG", layout="wide")
 # Header
 col1, col2 = st.columns([0.18, 0.82])
 with col1:
-    st.image("https://raw.githubusercontent.com/your-org/CardIAc/main/logo.png" if not MOCK_MODE else "https://picsum.photos/120/120", width=100)
+    st.image("https://raw.githubusercontent.com/Nef1972/CardIAc/refs/heads/main/cardiac_logo.png?token=GHSAT0AAAAAADPS6KGVX5AT6ONTPSYLLYF42I522HQ" if not MOCK_MODE else "https://raw.githubusercontent.com/Nef1972/CardIAc/refs/heads/main/cardiac_logo.png?token=GHSAT0AAAAAADPS6KGVX5AT6ONTPSYLLYF42I522HQ", width=100)
 with col2:
     st.title("CardIAc — Assistant IA pour l'analyse d'ECG")
     st.caption("Analyse instantanée d'ECG, comparaison aux standards et déclenchement d'alerte en cas d'anomalie critique")
