@@ -3,61 +3,74 @@ import base64
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# 1. Chargement de la configuration (Clé API)
+# 1. Chargement de la clé
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-print("--- Agent CardiAc (Vision) : Démarrage ---")
-
-# 2. Fonction technique pour que l'IA puisse "voir" l'image
+# 2. Fonction encodage image
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
-# Nom du fichier image
-image_path = "ECG-1.jpeg"
+# Nom de l'image (Vérifie bien que c'est le bon nom !)
+image_path = "ECG_1.png"
 
 try:
-    # Vérification de sécurité : l'image existe-t-elle ?
     if not os.path.exists(image_path):
         print(f"❌ ERREUR : L'image '{image_path}' est introuvable.")
-        print("Assurez-vous d'avoir uploadé le fichier image sur GitHub/dans le dossier.")
     else:
         print(f"Lecture de l'image : {image_path}...")
         base64_image = encode_image(image_path)
 
-        # 3. Le Prompt Système (Le cerveau du cardiologue)
+        # --- C'EST ICI QUE TOUT CHANGE ---
+        # Prompt structuré selon la méthode médicale standard
         instruction_systeme = """
-        Tu es CardiAc, un assistant IA expert en cardiologie d'urgence.
-        Ta mission : Analyser visuellement l'ECG fourni.
+        Tu es CardiAc, un assistant IA expert en interprétation d'électrocardiogrammes (ECG).
 
-        FORMAT DE RÉPONSE ATTENDU :
-        1. Rythme : (Sinusal, Fibrillation, etc.)
-        2. Anomalies visibles : (Segment ST, Ondes T, etc.)
-        3. DIAGNOSTIC : (Normal ou Pathologique)
-        4. ACTION : (Rien à signaler OU "ALERTE ROUGE - APPELER LE 15")
+        TA MISSION :
+        Analyse l'image fournie en suivant scrupuleusement cette grille de lecture clinique :
+
+        1. FRÉQUENCE & RYTHME :
+           - Estimation de la fréquence (BPM)
+           - Le rythme est-il régulier ?
+           - Présence d'ondes P ? (Rythme sinusal)
         
-        IMPORTANT : Ajoute toujours le disclaimer : "Je suis une IA, consultez impérativement un médecin."
+        2. ANALYSE DES ONDES :
+           - Complexe QRS : Fin (<0.12s) ou Large ?
+           - Segment ST : Recherche spécifique de SUS-DÉCALAGE (Signe d'infarctus) ou sous-décalage.
+           - Onde T : Normale, inversée ou ample ?
+        
+        3. SYNTHÈSE :
+           - Résume les anomalies trouvées.
+        
+        4. DÉCISION (OBLIGATOIRE) :
+           - Si sus-décalage ST ou arythmie dangereuse -> Écris "🔴 ALERTE ROUGE : APPEL 15/112"
+           - Si anomalies mineures -> Écris "🟠 ALERTE ORANGE : CONSULTATION RAPIDE"
+           - Si normal -> Écris "🟢 RAS : NORMAL"
+        
+        DISCLAIMER :
+        Conclus impérativement par : "Analyse générée par une IA (Prototype). Ne remplace pas l'avis d'un médecin."
         """
-        
-        print("Analyse en cours avec le modèle gpt-4o...")
-    
-        # 4. Envoi de l'image et du texte à l'IA
-        response = client.chat.completions.create(
+           
+        print("Analyse experte en cours avec gpt-4o...")
+
+         response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": instruction_systeme},
                 {"role": "user", "content": [
-                    {"type": "text", "text": "Voici l'ECG du patient. Analyse-le s'il te plaît."},
+                    {"type": "text", "text": "Fais l'analyse clinique complète de cet ECG."},
                     {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
                 ]}
             ],
-            max_tokens=500
+            max_tokens=800 # On laisse un peu plus de place pour la réponse détaillée
         )
-        # 5. Affichage du résultat
-        print("\n--- RÉSULTAT DE L'ANALYSE ---")
+           
+        print("\n--- RAPPORT CLINIQUE IA ---")
         print(response.choices[0].message.content)
         
 except Exception as e:
-    print(f"Une erreur technique est survenue : {e}")
+    print(f"Erreur : {e}")
+
+       
 
