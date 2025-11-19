@@ -1,10 +1,10 @@
-# CardiAc : Assistant IA pour l'analyse d'ECG
+# CardIAc : Assistant IA pour l'analyse d'ECG
 
 ## 1. Le Problème
 Les maladies cardiovasculaires nécessitent une détection rapide. Notre projet vise à aider les patients et les urgentistes à analyser un électrocardiogramme (ECG) instantanément pour détecter des anomalies critiques.
 
 ## 2. La Solution (Agentic AI)
-CardiAc est un agent autonome qui :
+CardIAc est un agent autonome qui :
 - Récupère une image ou des données d'ECG.
 - Analyse les tracés via une IA multimodale.
 - Compare les résultats aux standards médicaux.
